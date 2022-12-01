@@ -23,6 +23,17 @@ class LcdScreen():
         self.y = 0
         self.run = True
 
+        self.key_states_indexes = { 
+            "up" : 0,
+            "down" : 1,
+            "left" : 2,
+            "right" : 3,
+            "enter" : 4,
+            "back" : 5
+        }
+
+        self.key_states = [0] * len(self.key_states_indexes)
+
     def setBuffer(self, message):
         #print("Len: ", len(message))
         for x in range(self.LCD_WIDTH):
@@ -71,35 +82,27 @@ class LcdScreen():
                             pygame.K_RIGHT : "right",
                             pygame.K_UP    : "up",
                             pygame.K_DOWN  : "down",
-                            pygame.K_p     : "pause"}
+                            pygame.K_SPACE : "enter",
+                            pygame.K_b     : "back"}
  
         #print(event)
-        if event.type == pygame.KEYDOWN and event.key in registered_keys.keys():        
 
-            if event.key == pygame.K_LEFT:
-                if (self.x > 0):
-                    self.x -= 1
-            if event.key == pygame.K_RIGHT:
-                if (self.x < self.LCD_WIDTH - 1):
-                    self.x += 1
-            if event.key == pygame.K_UP:
-                if (self.y > 0):
-                    self.y -= 1
-            if event.key == pygame.K_DOWN:
-                if (self.y < self.LCD_HEIGHT - 1):
-                    self.y += 1
-            if event.key == pygame.K_p:
-                # Do not move when paused
-                pass
-            
-            print(self.x, self.y)
-            self.setPixel(self.x,self.y, 1)
+        is_pressed = event.type == pygame.KEYDOWN
+        if event.key in registered_keys:
+            self.setKeyState(registered_keys[event.key], is_pressed)
 
     def terminate(self):
         self.run = False
 
     def isRunning(self):
         return self.run
+
+    def setKeyState(self, key, is_pressed):
+        if key in self.key_states_indexes.keys():
+            self.key_states[self.key_states_indexes[key]] = is_pressed
+
+    def getKeyState(self):
+        return self.key_states
 
     def start_game(self):
         pygame.init()
@@ -112,7 +115,7 @@ class LcdScreen():
     
         self.run = True
     
-        frame_rate = 60
+        frame_rate = 30
     
 
         while self.run:
@@ -121,16 +124,15 @@ class LcdScreen():
                     self.run = False
     
                 # Update game speed
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_a:
+                if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                    #if event.key == pygame.K_a:
+                        #frame_rate += 1
+                    #if event.key == pygame.K_s:
+                        #frame_rate -= 1
     
-                        frame_rate += 1
-                    if event.key == pygame.K_s:
-                        frame_rate -= 1
-    
-                    if frame_rate < 1:
-                        frame_rate = 1
-                    print(frame_rate)
+                    #if frame_rate < 1:
+                    #    frame_rate = 1
+                    #print(frame_rate)
     
                     self.evaluate_keyboard_input_event(event)
     

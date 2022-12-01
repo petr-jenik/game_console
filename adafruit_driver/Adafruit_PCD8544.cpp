@@ -40,7 +40,7 @@
 #include <fake_display.h>
 
 // Pointer to an instance of fake display
-FakeDisplay* pFakeDisplay = nullptr;
+//FakeDisplay* pFakeDisplay = nullptr;
 
 /** the memory buffer for the LCD */
 uint8_t pcd8544_buffer[LCDWIDTH * LCDHEIGHT / 8] = {
@@ -232,7 +232,8 @@ void Adafruit_PCD8544::initDisplay() {
   for (int i = 0; i < 100; i++){
       printf("Display init\n");
   }
-  pFakeDisplay = new FakeDisplay;
+  auto pFakeDisplay = FakeDisplay::getInstance();
+  //pFakeDisplay.init();
 
 }
 
@@ -344,7 +345,8 @@ uint8_t Adafruit_PCD8544::getReinitInterval() { return _reinit_interval; }
   @brief Update the display
  */
 void Adafruit_PCD8544::display(void) {
-    printf("Display update\n");
+    //printf("Display update\n");
+    auto pFakeDisplay = FakeDisplay::getInstance();
     pFakeDisplay->updateDisplay(pcd8544_buffer, sizeof(pcd8544_buffer));
 }
 

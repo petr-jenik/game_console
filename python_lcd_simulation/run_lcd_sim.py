@@ -59,10 +59,13 @@ if __name__ == "__main__":
         lcd_screen.setBuffer(message)
         #lcd_screen.setPixel(x, y, value)
 
-        #  Send reply back to client
-        socket.send(b"World")
+        key_states = lcd_screen.getKeyState()
+        txMessage = b""
+        for item in key_states:
+            txMessage += b"1" if item == True else b"0"
 
-        
+        #  Send reply back to client
+        socket.send(txMessage)
 
     lcdScreenThread.join()
     logging.info("Main    : all done")
