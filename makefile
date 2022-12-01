@@ -1,7 +1,7 @@
 TARGET = game_console
 
 CC = g++
-CFLAGS = -g -DARDUINO=101 #-D__cplusplus1
+CFLAGS = -g -DARDUINO=101 -D__cplusplus1
 
 OUTDIR = ./bin
 DATADIR = ./data

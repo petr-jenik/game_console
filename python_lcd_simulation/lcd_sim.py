@@ -115,7 +115,7 @@ class LcdScreen():
     
         self.run = True
     
-        frame_rate = 30
+        frame_rate = 60
     
 
         while self.run:
