@@ -140,7 +140,7 @@ void menu_setup()
     while(bRun)
     {
         menu.show();
-        bRun = menu.update();
+        /*bRun = */ menu.update();
         delay(100);
     }
     std::cout << "Good bye!" << std::endl;

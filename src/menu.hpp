@@ -48,7 +48,7 @@ protected:
     const int cLineHeight = 9;
     const int cSliderWidth = 3;
 
-    int cStatusBarHeight = 6;
+    int cStatusBarHeight = 7;
     int cStatusBarWidth; // this->mrDisplay.width()
 
 
@@ -73,9 +73,12 @@ public:
         int sliderHeight = this->mrDisplay.height() - this->cStatusBarHeight;
         int sliderLen = sliderHeight / cNumberOfItems;
         int sliderYPos = this->cStatusBarHeight + map(iCurrent, 0, cNumberOfItems, 0, sliderHeight);
-        this->mrDisplay.drawFastVLine(cDisplayWidth - 3, this->cStatusBarHeight, sliderHeight, BLACK);
-        this->mrDisplay.drawFastVLine(cDisplayWidth - 2, sliderYPos, sliderLen, BLACK);
-        this->mrDisplay.drawFastVLine(cDisplayWidth - 1, this->cStatusBarHeight, sliderHeight, BLACK);
+        
+        this->mrDisplay.drawFastVLine(cDisplayWidth - 1, this->cStatusBarHeight, sliderYPos - this->cStatusBarHeight + 1, BLACK);
+        this->mrDisplay.drawFastHLine(cDisplayWidth - 2, sliderYPos, 1, BLACK);
+        this->mrDisplay.drawFastVLine(cDisplayWidth - 3, sliderYPos + 1, sliderLen - 1, BLACK);
+        this->mrDisplay.drawFastHLine(cDisplayWidth - 2, sliderYPos + sliderLen, 1, BLACK);
+        this->mrDisplay.drawFastVLine(cDisplayWidth - 1, sliderYPos + sliderLen, sliderHeight, BLACK);
     }
 
     void showStatusBar()
@@ -92,6 +95,8 @@ public:
 
         this->mrDisplay.drawRect(batteryX, batteryY, batterySizeX, batterySizeY, BLACK);
         this->mrDisplay.drawFastVLine(batteryX - 1, batteryY + 1, batterySizeY - 2, BLACK);
+
+        this->mrDisplay.drawFastHLine(0 , cStatusBarHeight -1 , cStatusBarWidth, BLACK);
 
         //auto cDisplayWidth = this->mrDisplay.width();
 
@@ -152,7 +157,10 @@ public:
             this->mrDisplay.print(lineText);
         }
 
-        this->showSlider(this->mpActiveSubmenu->activeItemIndex, numberOfMenuItems);
+        if (numberOfMenuItems > numberOfScreenLines)
+        {
+            this->showSlider(this->mpActiveSubmenu->activeItemIndex, numberOfMenuItems);
+        }
         this->showStatusBar();
         this->mrDisplay.display();
         //std::cout << "----------" << std::endl;
@@ -193,7 +201,7 @@ public:
             size_t numberOfMenuItems = this->mpActiveSubmenu->menuItems.size();
 
             // Go up or down
-            int menuStep = (bBtnDown) ? -1 : 1;
+            int menuStep = (bBtnDown) ? 1 : -1;
 
             if (numberOfMenuItems != 0)
             {
