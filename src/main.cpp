@@ -6,14 +6,13 @@
 
 int main ()
 {
-    arkanoid_setup();
+    menu_setup();
     while (1)
     {
-        arkanoid_loop();
+        menu_loop();
         delay(10);
     }
 
-    //
     //lcdDemo();
 
    return 0;

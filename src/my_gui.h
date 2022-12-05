@@ -52,6 +52,13 @@ public:
         return UserInput::isKeyPressed(eKey);
     }
 
+    /*
+    void drawTextOnLine(int lineIndex, String& lineString)
+    {
+        display.setCursor(2, i * 10);
+        display.print(lineString);
+    }*/
+
     Adafruit_PCD8544 display;
 
 };
