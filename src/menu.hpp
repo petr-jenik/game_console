@@ -45,14 +45,20 @@ protected:
     std::vector<MenuItem> menuItems;
     Adafruit_PCD8544& mrDisplay;
     unsigned int activeItemIndex = 0;
-    const int cLineHeight = 12;
+    const int cLineHeight = 9;
     const int cSliderWidth = 3;
+
+    int cStatusBarHeight = 6;
+    int cStatusBarWidth; // this->mrDisplay.width()
+
+
 
 public:
     Menu(Adafruit_PCD8544& rDisplay): mrDisplay(rDisplay), mpActiveSubmenu(this), upperMenu(nullptr)
     {
         // Disable text wrapping
         this->mrDisplay.setTextWrap(false);
+        this->cStatusBarWidth = this->mrDisplay.width();
     }
 
     void showSlider(int iCurrent, int cNumberOfItems)
@@ -64,18 +70,44 @@ public:
 
         auto cDisplayWidth = this->mrDisplay.width();
 
-        int sliderHeight = this->mrDisplay.height();
+        int sliderHeight = this->mrDisplay.height() - this->cStatusBarHeight;
         int sliderLen = sliderHeight / cNumberOfItems;
-        int sliderYPos = map(iCurrent, 0, cNumberOfItems, 0, sliderHeight);
-        this->mrDisplay.drawFastVLine(cDisplayWidth - 3, 0, sliderHeight, BLACK);
+        int sliderYPos = this->cStatusBarHeight + map(iCurrent, 0, cNumberOfItems, 0, sliderHeight);
+        this->mrDisplay.drawFastVLine(cDisplayWidth - 3, this->cStatusBarHeight, sliderHeight, BLACK);
         this->mrDisplay.drawFastVLine(cDisplayWidth - 2, sliderYPos, sliderLen, BLACK);
-        this->mrDisplay.drawFastVLine(cDisplayWidth - 1, 0, sliderHeight, BLACK);
+        this->mrDisplay.drawFastVLine(cDisplayWidth - 1, this->cStatusBarHeight, sliderHeight, BLACK);
     }
+
+    void showStatusBar()
+    {
+        int bateryPercents = 50;
+        int backlightStatePercents = 50;
+
+        this->mrDisplay.writeFillRect(0, 0, cStatusBarWidth, cStatusBarHeight, WHITE);
+
+        int batteryX = cStatusBarWidth - 25;
+        int batteryY = 0;
+        int batterySizeX = 20;
+        int batterySizeY = 5;
+
+        this->mrDisplay.drawRect(batteryX, batteryY, batterySizeX, batterySizeY, BLACK);
+        this->mrDisplay.drawFastVLine(batteryX - 1, batteryY + 1, batterySizeY - 2, BLACK);
+
+        //auto cDisplayWidth = this->mrDisplay.width();
+
+        //int sliderHeight = this->mrDisplay.height();
+        //int sliderLen = sliderHeight / cNumberOfItems;
+        //int sliderYPos = map(iCurrent, 0, cNumberOfItems, 0, sliderHeight);
+        //this->mrDisplay.drawFastVLine(cDisplayWidth - 3, 0, sliderHeight, BLACK);
+        //this->mrDisplay.drawFastVLine(cDisplayWidth - 2, sliderYPos, sliderLen, BLACK);
+        //this->mrDisplay.drawFastVLine(cDisplayWidth - 1, 0, sliderHeight, BLACK);
+    }
+
 
     void show()
     {
         // Limit output to N lines
-        size_t numberOfScreenLines = this->mrDisplay.height() / cLineHeight;
+        size_t numberOfScreenLines = (this->mrDisplay.height() - this->cStatusBarHeight) / cLineHeight;
 
         std::cout << "numberOfScreenLines:" << numberOfScreenLines << std::endl;
         size_t numberOfMenuItems = mpActiveSubmenu->menuItems.size();
@@ -109,19 +141,19 @@ public:
             if (currentIndex == this->mpActiveSubmenu->activeItemIndex)
             {
                 this->mrDisplay.setTextColor(/*color*/ WHITE, /*background*/ BLACK);
-                this->mrDisplay.writeFillRect(0, drawLineIdx * cLineHeight - 1, this->mrDisplay.width() - cSliderWidth, cLineHeight, BLACK);
+                this->mrDisplay.writeFillRect(0,this->cStatusBarHeight + 1 + drawLineIdx * cLineHeight - 1, this->mrDisplay.width() - cSliderWidth, cLineHeight, BLACK);
             }
             else
             {
                 this->mrDisplay.setTextColor(/* color*/ BLACK, /*background*/ WHITE);
             }
-        
-            this->mrDisplay.setCursor(2, drawLineIdx * cLineHeight);
+            // + 1 sucks - it is there because the black rectangle around selected text is bigger than the text and therefore text cannot be printed on Y=0 as the rectangle would be drawn on Y=-1.
+            this->mrDisplay.setCursor(2,this->cStatusBarHeight + 1 + drawLineIdx * cLineHeight);
             this->mrDisplay.print(lineText);
         }
 
         this->showSlider(this->mpActiveSubmenu->activeItemIndex, numberOfMenuItems);
-
+        this->showStatusBar();
         this->mrDisplay.display();
         //std::cout << "----------" << std::endl;
     }
