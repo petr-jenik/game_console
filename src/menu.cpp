@@ -22,6 +22,22 @@ void fce3()
     std::cout << "Function " << __func__ << "called" << std::endl;
 }
 
+void middleTextOnPosition(const char * pText, int x, int y, int color)
+{
+    //int textWidth = 0;
+    //int textHeight = 0;
+    int16_t upperLeftX, upperLeftY;
+    uint16_t w,h;
+    gui.display.getTextBounds(pText, 0, 0, &upperLeftX, &upperLeftY, &w, &h);
+    std::cout << w << ", " << h << std::endl;
+
+    //std::cout << (x - (w/2)) << ", " << y - (h/2) << std::endl;
+
+    gui.display.setCursor(x - (w/2), y - (h/2));
+    gui.display.println(pText);
+}
+
+
 void menu_setup()
 {
     gui.init();
@@ -40,18 +56,28 @@ void menu_setup()
 
     //gui.display.
 
+
     // text display tests
+    gui.display.drawRect(0, 0, LCDWIDTH - 1, LCDHEIGHT - 1, BLACK);
     gui.display.setTextSize(1);
     gui.display.setTextColor(BLACK);
-    gui.display.setCursor(10, 10);
-    gui.display.println("ARKANOID");
+    //gui.display.setCursor(10, 10);
+    middleTextOnPosition("pwnduino", LCDWIDTH / 2, LCDHEIGHT / 2 - 10, BLACK);
+    middleTextOnPosition("console", LCDWIDTH / 2, LCDHEIGHT / 2, BLACK);
+    middleTextOnPosition("v0.1", LCDWIDTH / 2, LCDHEIGHT / 2 + 10, BLACK);
+
+    //gui.display.println("SHITY");
+    //gui.display.setCursor(16, 20);
+    //gui.display.println("GAME");
+    //gui.display.setCursor(8, 30);
+    //gui.display.println("CONSOLE");
     //gui.display.setTextColor(WHITE, BLACK); // 'inverted' text
     //gui.display.println(3.141592);
     //gui.display.setTextSize(2);
     //gui.display.setTextColor(BLACK);
     //gui.display.print("0x"); gui.display.println(0xDEADBEEF, HEX);
     gui.display.display();
-    //delay(1000);
+    delay(2000);
 
 
     Menu menu(gui.display);
