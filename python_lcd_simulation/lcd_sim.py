@@ -47,7 +47,8 @@ class LcdScreen():
                 #print(index, x, y, self.LCD_WIDTH, self.LCD_HEIGHT)
                 #print(message[index])
                 #print(type(message[index]))
-                self.pixels[x][y] = ((1 << bit_index) & message[message_index]) != 0
+                # Rotate the display - TODO - Fix this dirty hack 
+                self.pixels[self.LCD_WIDTH - x - 1][self.LCD_HEIGHT - y - 1] = ((1 << bit_index) & message[message_index]) != 0
 
     def setPixel(self, x,y, value):
         #print(x, y)
@@ -59,7 +60,8 @@ class LcdScreen():
 
         if x in range(self.LCD_WIDTH):
             if y in range(self.LCD_HEIGHT):
-                self.pixels[x][y] = value
+                # Rotate the display
+                self.pixels[self.LCD_WIDTH - x - 1][self.LCD_HEIGHT - y - 1] = value
  
     def draw_rect(self, screen, x, y, color):
         #print(x * self.BLOCK_SIZE_X, y * self.BLOCK_SIZE_Y, self.BLOCK_SIZE_X, self.BLOCK_SIZE_Y)

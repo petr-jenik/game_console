@@ -1,11 +1,10 @@
 TARGET = game_console
 
 CC = g++
-CFLAGS = -g -DARDUINO=101 -D__cplusplus1
-
+CFLAGS = -g -DARDUINO=101 -D__cplusplus1 -DBUILD_FOR_X86
 OUTDIR = ./bin
 DATADIR = ./data
-SUBDIR = src ArduinoCore-API/api ArduinoCore-API/test/include adafruit_driver
+SUBDIR = src ArduinoCore-API/api ArduinoCore-API/test/include adafruit_driver games/gamebuino-maze-1.0/src games/marduino games/pong
 DIR_OBJ = ./obj
 
 INCS = $(wildcard libs/*.h $(foreach fd, $(SUBDIR), $(fd)/*.h))

@@ -1,7 +1,16 @@
+#ifdef BUILD_FOR_X86
+
 #include "Common.h"
 
 #include <chrono> // Needed by delay
 #include <thread> // Needed by delay
+#include <cstring> // Needed by strlen
+#include <iostream> // Neeed by cout
+
+#include "Buttons.h" // Needed to be able to simulate a key press
+#include "my_gui.h"
+
+#include <stdlib.h>
 
 void yield(void){}
 
@@ -16,9 +25,48 @@ int atexit(void (*func)()) __attribute__((weak));
 int main() __attribute__((weak));
 */
 
+PinStatus fakeGpios[255];
+
+
+
+void Button_processKeyStates(const char * rxMessage)
+{
+    if (strlen(rxMessage) != (Buttons::eKey_COUNT))
+    {
+        std::cout << "Invalid state of keys received" << std::endl;
+        return;
+    }
+
+    bool retval = false;
+    for (int keyIndex = static_cast<int>(Buttons::eKey_FIRST); keyIndex <= static_cast<int>(Buttons::eKey_LAST); keyIndex++)
+    {
+        char c = rxMessage[keyIndex];
+
+        if ((c != '0') && (c != '1'))
+        {
+            std::cout << "Invalid state of keys received" << std::endl;
+            return;
+        }
+
+        GUI& gui  = GUI::getInstance();
+        // Simulate a key press on a corresponding GPIO pin
+        digitalWrite(gui.buttons.pins[keyIndex], (c == '1') ? LOW : HIGH);
+    }
+}
+
 void pinMode(pin_size_t pinNumber, PinMode pinMode){}
-void digitalWrite(pin_size_t pinNumber, PinStatus status){}
-PinStatus digitalRead(pin_size_t pinNumber){ return LOW;}
+
+void digitalWrite(pin_size_t pinNumber, PinStatus status)
+{
+    fakeGpios[pinNumber] = status;
+    //std::cout << "Set pin " << pinNumber << " to state " << status << std::endl;
+}
+
+PinStatus digitalRead(pin_size_t pinNumber)
+{
+    return fakeGpios[pinNumber];
+}
+
 int analogRead(pin_size_t pinNumber) {return -1;}
 void analogReference(uint8_t mode){}
 void analogWrite(pin_size_t pinNumber, int value){}
@@ -54,8 +102,22 @@ void delayMicroseconds(unsigned int us)
 //void loop(void);
 
 // WMath prototypes
-long random(long){return 3;}
-long random(long, long){ return 2;}
-void randomSeed(unsigned long){}
+long random(long nMax)
+{
+    long value = rand() % nMax;      // Returns a pseudo-random integer between 0 and RAND_MAX.
+    std::cout << "Random value: " << value << std::endl;
+    return value;
+}
+long random(long nMin, long nMax)
+{
+    //return rand() % nMax
+    return 3;
+}
+
+void randomSeed(unsigned long)
+{
+    srand(time(NULL));   // Initialization, should only be called once.
+}
 //long map(long, long, long, long, long);
 
+#endif //BUILD_FOR_X86

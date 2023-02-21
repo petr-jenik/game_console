@@ -18,4 +18,6 @@ namespace UserInput
     bool isKeyPressed(Keys eKey);
 
     void processKeyStates(const char * rxMessage);
+
+    void init();
 }

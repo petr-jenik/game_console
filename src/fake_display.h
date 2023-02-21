@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef BUILD_FOR_X86
+
 #include <iostream>
 #include <string.h>
 #include <zmq.h>
@@ -7,10 +9,12 @@
 //#include <stdio.h>
 #include <unistd.h>
 #include <cstdint>
-#include "lcd_demo.h"
+//#include "lcd_demo.h"
 #include "ArduinoApi.h"
 
-#include "my_user_input.h"
+//#include "my_user_input.h"
+
+extern void Button_processKeyStates(const char * rxMessage);
 
 class FakeDisplay
 {
@@ -81,7 +85,7 @@ public:
         //printf ("Received message: %s\n", pBuffer);
         //fflush(stdout);
         // The only message which can be received (so far) is state of pressed 1s
-        UserInput::processKeyStates(pBuffer);
+        Button_processKeyStates(pBuffer);
     }
 
     void updateDisplay(const uint8_t * pBuffer, size_t bufferSize)
@@ -125,3 +129,6 @@ private:
     //static const size_t cSizeof_displayBuffer = sizeof(displayBuffer);
 
 };
+
+
+#endif //BUILD_FOR_X86

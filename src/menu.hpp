@@ -1,13 +1,14 @@
 #pragma once
 #include <vector>
+#include <map>
 #include "WString.h"
 
-#include <ArduinoAPI.h>
+//#include <ArduinoAPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 
 #include "fake_display.h"
-#include "my_user_input.h"
+//#include "my_user_input.h"
 
 #include <cstdint>
 
@@ -18,8 +19,9 @@ enum MenuItemType
 {
     functionCall,
     numberInput,
+    checkbox,
     stringInput,
-    submenu    
+    submenu
 };
 
 // Forward declaration
@@ -54,7 +56,7 @@ protected:
 
 
 public:
-    Menu(Adafruit_PCD8544& rDisplay): mrDisplay(rDisplay), mpActiveSubmenu(this), upperMenu(nullptr)
+    Menu(Adafruit_PCD8544& rDisplay): mpActiveSubmenu(this), upperMenu(nullptr), mrDisplay(rDisplay)
     {
         // Disable text wrapping
         this->mrDisplay.setTextWrap(false);
@@ -73,7 +75,8 @@ public:
         int sliderHeight = this->mrDisplay.height() - this->cStatusBarHeight;
         int sliderLen = sliderHeight / cNumberOfItems;
         int sliderYPos = this->cStatusBarHeight + map(iCurrent, 0, cNumberOfItems, 0, sliderHeight);
-        
+
+        this->mrDisplay.writeFillRect(cDisplayWidth - 4,  this->cStatusBarHeight, 4, sliderHeight, WHITE);
         this->mrDisplay.drawFastVLine(cDisplayWidth - 1, this->cStatusBarHeight, sliderYPos - this->cStatusBarHeight + 1, BLACK);
         this->mrDisplay.drawFastHLine(cDisplayWidth - 2, sliderYPos, 1, BLACK);
         this->mrDisplay.drawFastVLine(cDisplayWidth - 3, sliderYPos + 1, sliderLen - 1, BLACK);
@@ -96,7 +99,7 @@ public:
         this->mrDisplay.drawRect(batteryX, batteryY, batterySizeX, batterySizeY, BLACK);
         this->mrDisplay.drawFastVLine(batteryX - 1, batteryY + 1, batterySizeY - 2, BLACK);
 
-        this->mrDisplay.drawFastHLine(0 , cStatusBarHeight -1 , cStatusBarWidth, BLACK);
+        //this->mrDisplay.drawFastHLine(0 , cStatusBarHeight -1 , cStatusBarWidth, BLACK);
 
         //auto cDisplayWidth = this->mrDisplay.width();
 
@@ -114,7 +117,7 @@ public:
         // Limit output to N lines
         size_t numberOfScreenLines = (this->mrDisplay.height() - this->cStatusBarHeight) / cLineHeight;
 
-        std::cout << "numberOfScreenLines:" << numberOfScreenLines << std::endl;
+        //std::cout << "numberOfScreenLines:" << numberOfScreenLines << std::endl;
         size_t numberOfMenuItems = mpActiveSubmenu->menuItems.size();
 
         // THIS IS SO BAD - FIX IT!
@@ -127,26 +130,54 @@ public:
             size_t currentIndex = 0;
             if (numberOfMenuItems <= numberOfScreenLines)
             {
+                // Currently drawn items index matches index of a screen line
                 currentIndex = drawLineIdx;
             }
             else
             {
-                // Show current menu item in the middle of the screen and wrap from end of menu back to the start.
-                currentIndex = (this->mpActiveSubmenu->activeItemIndex - (numberOfScreenLines / 2) + drawLineIdx + numberOfMenuItems) % numberOfMenuItems;
+                if (this->mpActiveSubmenu->activeItemIndex <= numberOfScreenLines/2)
+                {
+                    currentIndex = drawLineIdx;
+                }
+                /*else if(this->mpActiveSubmenu->activeItemIndex >= (numberOfMenuItems - numberOfScreenLines/2))
+                {
+                    currentIndex = (this->mpActiveSubmenu->activeItemIndex - numberOfScreenLines + drawLineIdx) % numberOfMenuItems;
+                }*/
+                else
+                {
+                    // Show current menu item in the middle of the screen and wrap from end of menu back to the start.
+                    currentIndex = (this->mpActiveSubmenu->activeItemIndex - (numberOfScreenLines / 2) + drawLineIdx + numberOfMenuItems) % numberOfMenuItems;
+                }
             }
 
-            std::cout << currentIndex << std::endl;
+            //std::cout << currentIndex << std::endl;
 
             String lineText;
-            lineText.concat((currentIndex == this->mpActiveSubmenu->activeItemIndex) ? ">" :  " ");
+            //lineText.concat((currentIndex == this->mpActiveSubmenu->activeItemIndex) ? ">" :  " ");
             //lineText.concat((int)currentIndex);
             //lineText.concat(": ");
+            if (this->mpActiveSubmenu->menuItems[currentIndex].type == checkbox)
+            {
+                //std::cout << "Active item: " << this->mpActiveSubmenu->activeItemIndex << std::endl;
+                //std::cout << "Current index: " << currentIndex << std::endl;
+                //std::cout << "---------" << std::endl;
+
+                if (this->mpActiveSubmenu->menuItems[currentIndex].boolValue)
+                {
+                    lineText.concat(" |");
+                }
+                else
+                {
+                    lineText.concat("x|");
+                    //std::cout << currentIndex << std::endl;
+                }
+            }
             lineText.concat(this->mpActiveSubmenu->menuItems[currentIndex].name);
 
             if (currentIndex == this->mpActiveSubmenu->activeItemIndex)
             {
                 this->mrDisplay.setTextColor(/*color*/ WHITE, /*background*/ BLACK);
-                this->mrDisplay.writeFillRect(0,this->cStatusBarHeight + 1 + drawLineIdx * cLineHeight - 1, this->mrDisplay.width() - cSliderWidth, cLineHeight, BLACK);
+                this->mrDisplay.writeFillRect(0, this->cStatusBarHeight + 1 + drawLineIdx * cLineHeight - 1, this->mrDisplay.width()/* - cSliderWidth*/, cLineHeight, BLACK);
             }
             else
             {
@@ -166,6 +197,38 @@ public:
         //std::cout << "----------" << std::endl;
     }
 
+    struct NumberInput
+    {
+        String name;
+        int minValue;
+        int maxValue;
+        int value;
+    };
+
+    struct Select
+    {
+        int iSelected;
+        std::map<String, int> options;
+    };
+
+    void numberInput(NumberInput & rNumberInput)
+    {
+        this->mrDisplay.clearDisplay();
+        this->mrDisplay.setTextSize(0);
+
+        GUI &gui = GUI::getInstance();
+        //gui.alignText(rNumberInput.name, LCDWIDTH / 2, 10, BLACK);//, GUI::eHorizontalCenterAlign);
+        
+        this->mrDisplay.writeFillRect(5, this->mrDisplay.height() / 2, this->mrDisplay.width() - 10, 3, BLACK);
+
+        //this->mrDisplay.drawFastHLine(5, )
+        this->mrDisplay.drawFastVLine(5, (this->mrDisplay.height() / 2) - 5, 10, BLACK);
+        this->mrDisplay.drawFastVLine(this->mrDisplay.width() - 5, (this->mrDisplay.height() / 2) - 5, 10, BLACK);
+
+        this->showStatusBar();
+        this->mrDisplay.display();
+    }
+
     void clearItems()
     {
         this->mpActiveSubmenu->menuItems.clear();
@@ -183,25 +246,27 @@ public:
     {
         bool bKeepOnRunning = true;
 
+        GUI& gui = GUI::getInstance();
+        //gui.buttons.pressed(Buttons::eKey_Back)
         // Local copy of button states - to avoid race conditions
-        bool bBtnUp = UserInput::isKeyPressed(UserInput::eKey_Up);
+        /*bool bBtnUp = UserInput::isKeyPressed(UserInput::eKey_Up);
         bool bBtnDown = UserInput::isKeyPressed(UserInput::eKey_Down);
         bool bBtnLeft = UserInput::isKeyPressed(UserInput::eKey_Left);
         bool bBtnRight = UserInput::isKeyPressed(UserInput::eKey_Right);
         bool bBtnEnter = UserInput::isKeyPressed(UserInput::eKey_Enter);
         bool bBtnBack = UserInput::isKeyPressed(UserInput::eKey_Back);
-
-        if (bBtnBack)
+        */
+        if (gui.buttons.pressed(Buttons::eKey_Back))
         {
             bKeepOnRunning = false;
         }
 
-        if (bBtnUp || bBtnDown)
+        if (gui.buttons.pressed(Buttons::eKey_Up) || gui.buttons.pressed(Buttons::eKey_Down))
         {
             size_t numberOfMenuItems = this->mpActiveSubmenu->menuItems.size();
 
             // Go up or down
-            int menuStep = (bBtnDown) ? 1 : -1;
+            int menuStep = (gui.buttons.pressed(Buttons::eKey_Down)) ? 1 : -1;
 
             if (numberOfMenuItems != 0)
             {
@@ -209,36 +274,42 @@ public:
             }
         }
 
-        if (bBtnEnter)
+        if (gui.buttons.pressed(Buttons::eKey_Enter))
         {
-            if (this->mpActiveSubmenu->menuItems[this->activeItemIndex].type == functionCall)
+            if (this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].type == functionCall)
             {
-                if (this->mpActiveSubmenu->menuItems[this->activeItemIndex].fce != nullptr)
+                if (this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].fce != nullptr)
                 {
-                    this->mpActiveSubmenu->menuItems[this->activeItemIndex].fce();
+                    this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].fce();
                 }
                 else
                 {
-                    std::cout << "No function registered for this menu item" << std::endl;
+                    //std::cout << "No function registered for this menu item" << std::endl;
                 }
             }
-            if (this->mpActiveSubmenu->menuItems[this->activeItemIndex].type == submenu)
+            if (this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].type == submenu)
             {
-                this->mpActiveSubmenu->menuItems[this->activeItemIndex].submenu->upperMenu = this;
-                this->mpActiveSubmenu = this->mpActiveSubmenu->menuItems[this->activeItemIndex].submenu;
+                this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].submenu->upperMenu = this;
+                this->mpActiveSubmenu = this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].submenu;
                 //std::cout << "Show submenu" << std::endl;
                 /*
                 while(1)
                 {
                     delay(0); // Allow rest of the system to run
-                    this->menuItems[this->activeItemIndex].submenu->show();
-                    bool bSubmenuRunning = this->menuItems[this->activeItemIndex].submenu->update();
+                    this->menuItems[this->mpActiveSubmenu->activeItemIndex].submenu->show();
+                    bool bSubmenuRunning = this->menuItems[this->mpActiveSubmenu->activeItemIndex].submenu->update();
                     if (bSubmenuRunning == false)
                     {
                         // Break from the submenu
                         break;
                     }
                 }*/
+            }
+            if (this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].type == checkbox)
+            {
+                bool oldValue = this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].boolValue;
+                this->mpActiveSubmenu->menuItems[this->mpActiveSubmenu->activeItemIndex].boolValue = !oldValue;
+                //std::cout << "Toggle " << this->mpActiveSubmenu->activeItemIndex << std::endl;
             }
         }
 
