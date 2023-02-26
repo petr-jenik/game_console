@@ -10,7 +10,7 @@
 #include "Maze.hpp"
 #include "Arkanoid.hpp"
 #include "gameAPI.h"
-#include "Super-crate-buino.hpp"
+//#include "Super-crate-buino.hpp"
 
 static void _playGame(void (*pSetup)(void), void (*pLoop)(void))
 {
@@ -80,10 +80,11 @@ void maze_play()
      _playGame(maze);
 }
 
+/*
 void super_crate_play()
 {
     //setTrace(true);
      _playGame(super_crate_buino_setup, super_crate_buino_loop);
      setTrace(false);
-}
+}*/
 

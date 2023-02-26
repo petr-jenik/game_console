@@ -238,7 +238,7 @@ public:
 
     bool update()
     {
-        this->display.display();
+        //this->display.display();
         // Draw the display more often, maybe it will improve picture quality on the real LCD.
         // 50 ms = 20 FPS
         // 67 ms = 15 FPS
@@ -262,7 +262,7 @@ public:
              delay(2);
         }
 
-        this->display.clearDisplay();
+        //this->display.clearDisplay();
 
         buttons.update();
         //delay(67);
@@ -419,6 +419,7 @@ void Gamebuino::setFrameRate(uint8_t fps) {
     {
         this->display.clearDisplay();
         this->display.setTextSize(1);
+        this->display.setTextColor(BLACK);
 
         this->alignText(message.c_str(), LCDWIDTH / 2, LCDHEIGHT / 2, BLACK, GUI::eHorizontalCenterAlign, GUI::eVerticalCenterAlign);
         this->display.display();
@@ -430,6 +431,7 @@ void Gamebuino::setFrameRate(uint8_t fps) {
     {
         //this->display.clearDisplay();
         this->display.setTextSize(1);
+        this->display.setTextColor(BLACK);
 
         const int cRectOffsetFromSide = 5;
 
@@ -581,6 +583,8 @@ enum VerticalAlignment
             default:
                 break;
         }
+
+        //this->setColor(color);
 
         this->display.setCursor(alignedX, alignedY);
         this->display.println(pText);

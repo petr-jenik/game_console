@@ -2,10 +2,10 @@ TARGET = game_console
 
 CC = g++
 CFLAGS = -g -DARDUINO=101 -D__cplusplus1 -DBUILD_FOR_X86
-OUTDIR = ./bin
-DATADIR = ./data
-SUBDIR = src ArduinoCore-API/api ArduinoCore-API/test/include adafruit_driver games/gamebuino-maze-1.0/src games/marduino games/pong
-DIR_OBJ = ./obj
+OUTDIR = ./build/bin
+DATADIR = ./build/data
+SUBDIR = src libs/ArduinoCore-API/api libs/ArduinoCore-API/test/include libs/adafruit_driver src/games src/menu src/x86
+DIR_OBJ = ./build/obj
 
 INCS = $(wildcard libs/*.h $(foreach fd, $(SUBDIR), $(fd)/*.h))
 INCS += $(wildcard libs/*.hpp $(foreach fd, $(SUBDIR), $(fd)/*.hpp))
@@ -14,7 +14,7 @@ C_SRCS += $(wildcard $(foreach fd, $(SUBDIR), $(fd)/*.c))
 
 
 #ARDUINO_CORE_IMPLEMENTATION_INC=ArduinoCore-API/test/include
-ARDUINO_CORE_IMPLEMENTATION=ArduinoCore-API/test/src
+ARDUINO_CORE_IMPLEMENTATION=libs/ArduinoCore-API/test/src
 
 #INCS += $(wildcard $(foreach fd, $(ARDUINO_CORE_IMPLEMENTATION_INC), $(fd)/*.h))
 CPP_SRCS += $(ARDUINO_CORE_IMPLEMENTATION)/dtostrf.cpp
