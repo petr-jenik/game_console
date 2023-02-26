@@ -38,10 +38,10 @@ void menuSetup()
 
     //Serial.begin(115200);
 
-    Menu menu(gui.display);
+    //Menu menu();
+    Menu* menu = new Menu;
 
-
-    Menu::NumberInput numberInput = {"Backlight", 255, 10, 100};
+ 
     /*numberInput.maxValue = 255;
     numberInput.minValue = 10;
     numberInput.name = 100;
@@ -57,7 +57,7 @@ void menuSetup()
     // Submenu 1
     item.name = "Games";
     item.type = submenu;
-    item.submenu = new Menu(gui.display);
+    item.submenu = new Menu;
 
     MenuItem submenuItem;
     submenuItem.type = functionCall;
@@ -74,12 +74,12 @@ void menuSetup()
     item.submenu->registerItem(submenuItem);
 
     submenuItem.name = "Crates";
-    submenuItem.fce = super_crate_play;
+    submenuItem.fce = nullptr;
     item.submenu->registerItem(submenuItem);
-
+    
     submenuItem.name = "Race cars";
     item.submenu->registerItem(submenuItem);
-
+//
     submenuItem.name = "Mario";
     submenuItem.fce = marduino_play;
     item.submenu->registerItem(submenuItem);
@@ -93,14 +93,38 @@ void menuSetup()
     item.submenu->registerItem(submenuItem);
 
     // Register submenu
-    menu.registerItem(item);
+    menu->registerItem(item);
 
     // Submenu 2
     item.name = "Settings";
     item.type = submenu;
-    item.submenu = new Menu(gui.display);
+    item.submenu = new Menu;
 
     //MenuItem submenuItem;
+
+    // Number input
+    submenuItem.type = numberInput;
+    submenuItem.name = "Number input";
+    submenuItem.storage.number.max = 255;
+    submenuItem.storage.number.min = 5;
+    submenuItem.storage.number.value = 50;
+    submenuItem.fce = nullptr;
+    item.submenu->registerItem(submenuItem);
+    
+    // Checkbox
+    submenuItem.type = checkbox;
+    submenuItem.name = "checkbox";
+    submenuItem.fce = nullptr;
+    item.submenu->registerItem(submenuItem);
+    
+    
+    // String input
+    submenuItem.type = stringInput;
+    submenuItem.name = "string input";
+    submenuItem.fce = nullptr;
+    item.submenu->registerItem(submenuItem);
+    
+    /*
     submenuItem.type = checkbox;
     submenuItem.name = "Brightness";
     submenuItem.fce = nullptr;
@@ -111,14 +135,14 @@ void menuSetup()
     item.submenu->registerItem(submenuItem);
     submenuItem.name = "Light";
     item.submenu->registerItem(submenuItem);
-
+    */
     // Register submenu
-    menu.registerItem(item);
+    menu->registerItem(item);
 
     // Submenu 3
     item.name = "Demo";
     item.type = submenu;
-    item.submenu = new Menu(gui.display);
+    item.submenu = new Menu;
 
     //MenuItem submenuItem;
     submenuItem.type = functionCall;
@@ -132,14 +156,16 @@ void menuSetup()
     item.submenu->registerItem(submenuItem);
     
     // Register submenu
-    menu.registerItem(item);
+    menu->registerItem(item);
+
+    MenuViewer menuViewer;
 
     while (1)
     {
         if (gui.update())
         {
-            menu.show();
-            /*bRun = */ menu.update();
+            menuViewer.show(*menu);
+            /*bRun = */ menuViewer.update(*menu);
         }
     }
 }
