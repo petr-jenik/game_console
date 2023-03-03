@@ -1,7 +1,12 @@
 #pragma once
 
+#ifdef BUILD_FOR_X86
 #include <ArduinoAPI.h>
-#include <menu_item.hpp>
+#else
+#include <Arduino.h>
+#endif //BUILD_FOR_X86
+
+#include "menu_item.hpp"
 #include "my_gui.h"
 
 /*
