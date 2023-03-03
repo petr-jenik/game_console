@@ -10,6 +10,8 @@
 #include "menu.hpp"
 //GUI gui;
 
+#include "analog_voltage_demo.hpp"
+
 void showWelcomeScreen()
 {
     GUI &gui = GUI::getInstance();
@@ -124,6 +126,13 @@ void menuSetup()
     submenuItem.fce = nullptr;
     item.submenu->registerItem(submenuItem);
     
+    // Read analog value
+    submenuItem.type = functionCall;
+    submenuItem.name = "analog demo";
+    submenuItem.fce = show_analog_voltage;
+    item.submenu->registerItem(submenuItem);
+    
+
     /*
     submenuItem.type = checkbox;
     submenuItem.name = "Brightness";

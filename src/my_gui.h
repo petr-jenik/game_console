@@ -13,6 +13,7 @@
 //#include "fake_display.h"
 #include "Buttons.h"
 //#include "my_user_input.h"
+#include "Battery.hpp"
 
 #include <cstdint>
 
@@ -34,13 +35,6 @@ static const int32_t backlight_pin = 16; //
 #define FLIPH 1
 #define FLIPV 2
 #define FLIPVH 3
-
-void setTrace(bool bEnabled);
-
-extern "C" {
-	void __cyg_profile_func_enter(void *this_fn, void *call_site) __attribute__((no_instrument_function));
-	void __cyg_profile_func_exit(void *this_fn, void *call_site) __attribute__((no_instrument_function));
-}
 
 class GUI
 {
@@ -521,21 +515,21 @@ void Gamebuino::setFrameRate(uint8_t fps) {
 
     Adafruit_PCD8544 display;
     Buttons buttons;
+    Battery battery;
 
+    enum HorizontalAlignment
+    {
+        eHorizontalLeftAlign,
+        eHorizontalCenterAlign,
+        eHorizontalRightAlign
+    };
 
-enum HorizontalAlignment
-{
-    eHorizontalLeftAlign,
-    eHorizontalCenterAlign,
-    eHorizontalRightAlign
-};
-
-enum VerticalAlignment
-{
-    eVerticalTopAlign,
-    eVerticalCenterAlign,
-    eVerticalBottomAlign
-};
+    enum VerticalAlignment
+    {
+        eVerticalTopAlign,
+        eVerticalCenterAlign,
+        eVerticalBottomAlign
+    };
 
     void alignText(const char * pText,
                 int32_t x,
