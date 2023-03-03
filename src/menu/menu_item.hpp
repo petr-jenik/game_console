@@ -2,7 +2,12 @@
 
 #include <vector>
 #include <map>
+
+#ifdef BUILD_FOR_X86
 #include <ArduinoAPI.h>
+#else
+#include <Arduino.h>
+#endif //BUILD_FOR_X86
 
 enum MenuItemType
 {
@@ -12,6 +17,13 @@ enum MenuItemType
     stringInput,
     submenu
 };
+
+struct Select
+{
+    size_t iSelected;
+    std::vector<String> options;
+};
+
 
 // Forward declaration
 class MenuItem;
@@ -52,6 +64,7 @@ struct Storage
     NumberValue number;
     bool boolValue = false;
     String stringValue = "";
+    Select select;
 };
 
 class MenuItem

@@ -1,3 +1,5 @@
+#define BUILD_FOR_X86
+
 #ifdef BUILD_FOR_X86
 
 #include "ArduinoApi.h"
@@ -6,7 +8,7 @@
 
 #include <iostream>
 
-#include <my_gui.h>
+#include "my_gui.h"
 
 bool bStarted = false;
 

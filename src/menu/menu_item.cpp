@@ -1,11 +1,16 @@
 
 #include <vector>
 #include <map>
-#include <ArduinoAPI.h>
 
-#include <menu_item.hpp>
-#include <screen_number_input.hpp>
-#include <screen_boolean_input.hpp>
+#ifdef BUILD_FOR_X86
+#include <ArduinoApi.h>
+#else
+#include <Arduino.h>
+#endif //BUILD_FOR_X86
+
+#include "menu_item.hpp"
+#include "screen_number_input.hpp"
+#include "screen_boolean_input.hpp"
 
 void Menu::clearItems()
 {

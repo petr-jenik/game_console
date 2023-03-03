@@ -3,15 +3,14 @@
 #include <map>
 #include "WString.h"
 
-//#include <ArduinoAPI.h>
-//#include <Adafruit_GFX.h>
-//#include <Adafruit_PCD8544.h>
+#ifdef BUILD_FOR_X86
+#include <ArduinoAPI.h>
+#else
+#include <Arduino.h>
+#endif //BUILD_FOR_X86
 
-//#include "fake_display.h"
-//#include "my_user_input.h"
-
-#include <my_gui.h>
-#include <menu_item.hpp>
+#include "my_gui.h"
+#include "menu_item.hpp"
 
 #include <cstdint>
 

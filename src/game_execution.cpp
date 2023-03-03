@@ -57,10 +57,8 @@ static void _playGame(GameAPI& pGame)
 
 void pong_play()
 {
-    setTrace(true);
     Pong pong;
     _playGame(pong);
-    setTrace(false);
 }
 
 void arkanoid_play()
@@ -83,8 +81,6 @@ void maze_play()
 /*
 void super_crate_play()
 {
-    //setTrace(true);
      _playGame(super_crate_buino_setup, super_crate_buino_loop);
-     setTrace(false);
 }*/
 

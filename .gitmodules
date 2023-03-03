@@ -1,0 +1,3 @@
+[submodule "libs/ArduinoCore-API"]
+	path = libs/ArduinoCore-API
+	url = https://github.com/arduino/ArduinoCore-API.git
