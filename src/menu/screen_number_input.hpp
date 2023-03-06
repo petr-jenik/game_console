@@ -37,6 +37,10 @@ void screen_number_input(MenuItem& item)
             labelMax.concat(item.storage.number.max);
             gui.alignText(labelMax.c_str(), gui.display.width() - 5,  gui.display.height() / 2 + 10, BLACK, GUI::eHorizontalRightAlign);
 
+            String labelCurrentValue;
+            labelCurrentValue.concat(item.storage.number.value);
+            gui.alignText(labelCurrentValue.c_str(), gui.display.width() / 2,  gui.display.height() / 2 + 20, BLACK, GUI::eHorizontalCenterAlign);
+
             // Show vertical slider bar
             const int cSliderOffsetX = 5;
             const int cSliderLength = gui.display.width() - 2 * cSliderOffsetX; // Remove offset from left and from right side of the screen
@@ -69,7 +73,6 @@ void screen_number_input(MenuItem& item)
             break;
         }
 
-
         if (gui.isKeyPressed(Buttons::eKey_Left))
         {
             if (item.storage.number.value > item.storage.number.min)
@@ -84,6 +87,12 @@ void screen_number_input(MenuItem& item)
             {
                 item.storage.number.value++;
             }
+        }
+
+        // Call a callback function, if provided
+        if (item.genericCallback != nullptr)
+        {
+            item.genericCallback(item);
         }
     }
 }
