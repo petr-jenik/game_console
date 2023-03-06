@@ -81,67 +81,6 @@ public:
         this->buttons.begin();
     }
 
-    void animatedIntroScreen()
-    {
-        this->display.clearDisplay();
-
-        this->drawDashedVLine(0,0,50);
-        this->drawDashedVLine(1,1,50);
-        this->drawDashedVLine(2,2,50);
-
-        for (int i = 0; i < 10; i++)
-        {
-            this->drawDashedVLine(5 + i,0, 50, i);
-        }
-
-        for (int i = 0; i < 10; i++)
-        {
-            this->drawDashedVLine(20 + i, 0, 50, i, i);
-        }
-
-        //this->drawDashedVLine(0,0,20);
-
-        
-        this->display.display(); // show splashscreen
-        //delay(10000);
-
-        /*
-        this->display.clearDisplay();
-        this->display.display(); // show splashscreen
-        delay(1000);
-
-
-
-        // text display tests
-        this->display.drawRect(0, 0, LCDWIDTH - 1, LCDHEIGHT - 1, BLACK);
-        this->display.setTextSize(1);
-        this->display.setTextColor(BLACK);
-
-        for (int32_t i = 0; i < LCDHEIGHT / 2; i++)
-        {
-            this->display.drawRect(i, i, LCDWIDTH - 1 - 2*i, LCDHEIGHT - 1 - 2*i, BLACK);
-            this->display.display();
-            delay(30);
-        }
-
-        for (int i = 0; i < LCDHEIGHT / 2; i++)
-        {
-            this->display.drawRect(i, i, LCDWIDTH - 1 - 2*i, LCDHEIGHT - 1 - 2*i, WHITE);
-            this->display.setCursor(10, 10);
-            this->alignText("pwnduino", LCDWIDTH / 2, LCDHEIGHT / 2 - 10, BLACK, GUI::eHorizontalCenterAlign);
-            this->alignText("console", LCDWIDTH / 2, LCDHEIGHT / 2, BLACK, GUI::eHorizontalCenterAlign);
-            this->alignText("v0.1", LCDWIDTH / 2, LCDHEIGHT / 2 + 10, BLACK, GUI::eHorizontalCenterAlign);
-
-            this->display.display();
-            delay(30);
-        }
-
-
-        this->display.display();
-        delay(1000);
-        */
-    }
-
     void demo()
     {
         this->display.setTextSize(1);
@@ -421,7 +360,7 @@ void Gamebuino::setFrameRate(uint8_t fps) {
         delay(1000);
     }
 
-    void showPopUp(String message)
+    void showPopUp(String message, bool bBlocking = true)
     {
         //this->display.clearDisplay();
         this->display.setTextSize(1);
@@ -444,12 +383,15 @@ void Gamebuino::setFrameRate(uint8_t fps) {
         this->alignText(message.c_str(), LCDWIDTH / 2, LCDHEIGHT / 2, BLACK, GUI::eHorizontalCenterAlign, GUI::eVerticalCenterAlign);
         this->display.display();
 
-        delay(100);
-        while(this->isKeyPressed(Buttons::eKey_Enter) == false && this->isKeyPressed(Buttons::eKey_Back) == false)
+        if (bBlocking)
         {
-            this->update();
+            delay(100);
+            while(this->isKeyPressed(Buttons::eKey_Enter) == false && this->isKeyPressed(Buttons::eKey_Back) == false)
+            {
+                this->update();
+            }
+            delay(100);
         }
-        delay(100);
     }
 
     int8_t currentColor = BLACK;
