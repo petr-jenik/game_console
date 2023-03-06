@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include <cstdio>
+#include <iostream>
 
 #include <fake_display.h>
 
@@ -295,6 +296,9 @@ void Adafruit_PCD8544::setContrast(uint8_t val) {
   if (val > 0x7f) {
     val = 0x7f;
   }
+
+  std::cout << "Set contrast to " << val << std::endl;
+
   _contrast = val;
   command(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION);
   command(PCD8544_SETVOP | val);
@@ -309,6 +313,9 @@ void Adafruit_PCD8544::setBias(uint8_t val) {
   if (val > 0x07) {
     val = 0x07;
   }
+
+  std::cout << "Set bias to " << val << std::endl;
+
   _bias = val;
   command(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION);
   command(PCD8544_SETBIAS | val);

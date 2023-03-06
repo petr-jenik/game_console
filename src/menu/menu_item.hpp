@@ -70,6 +70,23 @@ struct Storage
 class MenuItem
 {
 public:
+
+    void clear()
+    {
+        this->type = functionCall;
+        this->name = "UNDEFINED";
+        this->storage.boolValue = false;
+        this->storage.number.max=0;
+        this->storage.number.min=0;
+        this->storage.number.value=0;
+        this->storage.select.iSelected=0;
+        this->storage.select.options.clear();
+        this->storage.stringValue = "";
+        this->fce = nullptr;
+        this->genericCallback = nullptr;
+        this->submenu = nullptr;
+    }
+
     MenuItemType type;
     String name;
     Storage storage;
