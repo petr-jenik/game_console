@@ -104,20 +104,39 @@ void screen_select_input(MenuItem& item)
             gui.display.display();
         }
 
-        if (gui.isKeyPressed(Buttons::eKey_Back))
+        if (gui.buttons.pressed(Buttons::eKey_Back))
         {
             break;
         }
+        
+        if (gui.buttons.pressed(Buttons::eKey_Enter))
+        {
+            item.storage.select.iSelected = tmpSelectedIdx;
+            if (item.type == checkbox)
+            {
+                // DIRTY HACK how to force input screen to behave like a checkbox
+                // index 0 should be always "OFF"
+                item.storage.boolValue = (tmpSelectedIdx == 0) ? false : true; 
+            }
+            break;
+        }
 
-        if (gui.isKeyPressed(Buttons::eKey_Up))
+        if (gui.buttons.pressed(Buttons::eKey_Up))
         {
             tmpSelectedIdx = (tmpSelectedIdx + cNumberOfItems - 1) % cNumberOfItems;
         }
 
-        if (gui.isKeyPressed(Buttons::eKey_Down))
+        if (gui.buttons.pressed(Buttons::eKey_Down))
         {
             tmpSelectedIdx = (tmpSelectedIdx + 1) % cNumberOfItems;
         }
         TRACK;
+    }
+
+
+    // Call a callback function, if provided
+    if (item.genericCallback != nullptr)
+    {
+        item.genericCallback(item);
     }
 }
