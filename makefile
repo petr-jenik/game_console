@@ -4,7 +4,7 @@ CC = g++
 CFLAGS = -g -DARDUINO=101 -D__cplusplus1 -DBUILD_FOR_X86
 OUTDIR = ./build/bin
 DATADIR = ./build/data
-SUBDIR = src libs/ArduinoCore-API/api libs/ArduinoCore-API/test/include libs/adafruit_driver src/games src/menu src/x86
+SUBDIR = src libs/ArduinoCore-API/api libs/ArduinoCore-API/test/include libs/adafruit_driver libs/adafruit_driver/Fonts src/games src/menu src/x86
 DIR_OBJ = ./build/obj
 
 INCS = $(wildcard libs/*.h $(foreach fd, $(SUBDIR), $(fd)/*.h))

@@ -67,7 +67,13 @@ PinStatus digitalRead(pin_size_t pinNumber)
     return fakeGpios[pinNumber];
 }
 
-int analogRead(pin_size_t pinNumber) {return -1;}
+
+int analogRead(pin_size_t pinNumber) {
+    static int voltage = 0;
+    voltage++;
+    voltage = voltage % 4096;
+    return voltage;
+    }
 void analogReference(uint8_t mode){}
 void analogWrite(pin_size_t pinNumber, int value){}
 

@@ -12,14 +12,22 @@ void show_analog_voltage()
             gui.display.clearDisplay();
             gui.display.setTextSize(0);
 
-            int voltageMilliV = gui.battery.voltageMilliV();
+            gui.battery.update();
 
             String tmpString;
-            tmpString.concat(voltageMilliV);
+            tmpString.concat(gui.battery.voltageMilliV());
             tmpString.concat(" mV");
 
             gui.display.setTextColor(BLACK);
             gui.alignText(tmpString.c_str(), gui.display.width()/2,  gui.display.height() / 2, BLACK, GUI::eHorizontalCenterAlign);
+
+            // Show voltage as percentage of battery capacity
+
+            String percentageStr;
+            percentageStr.concat(gui.battery.getPercentage());
+            percentageStr.concat("%");
+            gui.alignText(percentageStr.c_str(), gui.display.width()/2,  gui.display.height() / 2 + 9, BLACK, GUI::eHorizontalCenterAlign);
+
 
             gui.display.display();
         }

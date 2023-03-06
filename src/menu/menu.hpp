@@ -17,6 +17,8 @@
 // TODO Refactor this whole file - it is SO BAD - too complex
 // Ideas - reconsider division between MenuItem and Menu class. Maybe Menu class contains too many specific details.
 
+// Include additional font
+#include "Picopixel.h"
 
 class MenuViewer
 {
@@ -59,7 +61,7 @@ public:
 
     void showStatusBar()
     {
-        int bateryPercents = 50;
+
         int backlightStatePercents = 50;
 
         // Clear the whole status bar area
@@ -70,9 +72,35 @@ public:
         int batterySizeX = 20;
         int batterySizeY = 5;
 
+        gui.display.setFont(&Picopixel);
+
+        // Update battery voltage measurement
+        gui.battery.update();
+        int bateryPercents = gui.battery.getPercentage();
+        bateryPercents = constrain(bateryPercents, 0, 100);
+
+        // Show battery percentage
+        String lineText = "";
+        lineText.concat(bateryPercents);
+        lineText.concat("%");
+
+        gui.display.setTextColor(/* color*/ BLACK, /*background*/ WHITE);
+        //gui.display.setCursor(batteryX - 20, 5);
+        //gui.display.print(lineText);
+        // Print text aligned to right         
+        gui.alignText(lineText.c_str(), batteryX - 3, 4, BLACK, GUI::eHorizontalRightAlign, GUI::eVerticalBottomAlign);
+        
+        gui.display.setFont(nullptr);
+
         // Draw the battery
         gui.display.drawRect(batteryX, batteryY, batterySizeX, batterySizeY, BLACK);
         gui.display.drawFastVLine(batteryX - 1, batteryY + 1, batterySizeY - 2, BLACK);
+
+        int battLevelOffset = map(bateryPercents, 0, 100, batterySizeX, 0);
+
+        gui.display.fillRect(batteryX + battLevelOffset, batteryY, batterySizeX - battLevelOffset, batterySizeY, BLACK);
+        
+
     }
 
     void show(Menu& menu)
@@ -124,7 +152,7 @@ public:
             if (currentIndex == menu.mpActiveMenu->activeItemIndex)
             {
                 gui.display.setTextColor(/*color*/ WHITE, /*background*/ BLACK);
-                gui.display.writeFillRect(0, this->cStatusBarHeight + 1 + drawLineIdx * cLineHeight - 1, gui.display.width()/* - cSliderWidth*/, cLineHeight, BLACK);
+                gui.display.writeFillRect(0, this->cStatusBarHeight + drawLineIdx * cLineHeight, gui.display.width()/* - cSliderWidth*/, cLineHeight, BLACK);
             }
             else
             {
