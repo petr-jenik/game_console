@@ -10,6 +10,8 @@
 #include "Maze.hpp"
 #include "Arkanoid.hpp"
 #include "gameAPI.h"
+#include "towers.hpp"
+
 //#include "Super-crate-buino.hpp"
 
 static void _playGame(void (*pSetup)(void), void (*pLoop)(void))
@@ -77,6 +79,13 @@ void maze_play()
     Maze maze;
      _playGame(maze);
 }
+
+void towers_play()
+{
+    Towers towers;
+     _playGame(towers);
+}
+
 
 /*
 void super_crate_play()

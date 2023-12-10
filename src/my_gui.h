@@ -74,100 +74,13 @@ public:
 
         // you can change the contrast around to adapt the display
         // for the best viewing!
-        this->display.setContrast(62);
-        this->display.setBias(4);
+        this->display.setContrast(53);
+        this->display.setBias(5);
 
         // Initialize buttons
         this->buttons.begin();
     }
 
-    void demo()
-    {
-        this->display.setTextSize(1);
-
-        const int cMaxCol = (Buttons::eKey_COUNT / 2);
-        const int cMaxRow = 2;
-
-        const int32_t cButtonWidth = (LCDWIDTH / cMaxCol);
-        const int32_t cButtonHeight = (LCDHEIGHT / cMaxRow);
-
-
-        while(1)
-        {
-            if (!this->update())
-            {
-                continue;
-            }
-
-            this->display.clearDisplay();
-
-            for (int32_t key = 0; key < Buttons::eKey_COUNT; key++)
-            {
-                int32_t iRow = key / cMaxCol;
-                int32_t iCol = key % cMaxCol;
-
-                bool bPressed = this->buttons.repeat(static_cast<Buttons::Keys>(key), 5);
-
-                uint16_t buttonColor = (bPressed) ? BLACK : WHITE;
-                uint16_t textColor = (bPressed) ? WHITE : BLACK;
-
-                this->display.writeFillRect(cButtonWidth * iCol, cButtonHeight * iRow, cButtonWidth, cButtonHeight, buttonColor);
-                this->display.setTextColor(textColor);
-                
-                char * buttonText = nullptr;
-
-                switch(key)
-                {
-                    case Buttons::eKey_Up:
-                        buttonText = "UP";
-                        if(bPressed) { display.setContrast((display.getContrast() + 1) % 0x7f); }
-                        break;    
-                    case Buttons::eKey_Down:
-                        buttonText = "DWN";
-                        break;    
-                    case Buttons::eKey_Left:
-                        if(bPressed) { display.setBias((display.getBias() + 1) % 0x07);}
-                        buttonText = "L";
-                        break;
-                    case Buttons::eKey_Right:
-                        buttonText = "R";
-                        break;
-                    case Buttons::eKey_Enter:
-                    {   
-                        buttonText = "ENT";
-                        break;    
-                    }
-                    case Buttons::eKey_Back:
-                    {
-                        buttonText = "BCK";
-                        break;
-                    }
-                    default:
-                        buttonText = "0";
-                }
-
-                this->alignText(buttonText, cButtonWidth * iCol + (cButtonWidth / 2), cButtonHeight * iRow + (cButtonHeight / 2), textColor, GUI::eHorizontalCenterAlign, GUI::eVerticalCenterAlign);
-            }
-
-            const int32_t cLineHeight = 9;
-            String contrastString = "c:";
-            contrastString.concat(display.getContrast());
-            //contrastString.concat("x|");
-
-            String biasString = "b:";
-            biasString.concat(display.getBias());
-
-            this->alignText(contrastString.c_str(), 0, this->display.height(), BLACK, GUI::eHorizontalLeftAlign, GUI::eVerticalTopAlign);
-            this->alignText(biasString.c_str(), this->display.width() / 2, this->display.height(), BLACK, GUI::eHorizontalLeftAlign, GUI::eVerticalTopAlign);
-
-            if ( this->buttons.held(Buttons::eKey_Back, 10)) // TODO Move all magical constants to variables
-            {
-                break;
-            }
-
-            this->display.display();
-        }
-    }
 
     bool update()
     {

@@ -69,10 +69,10 @@ String MenuItem::getLineText()
 {
     String lineText ="";
 
-    if (this->type == checkbox)
+    /*if (this->type == checkbox)
     {
         lineText.concat( this->storage.boolValue ? "x|" : " |");
-    }
+    }*/
 
     lineText.concat(this->name);
     return lineText;
