@@ -321,7 +321,7 @@ void menuSetup()
     submenuItem.clear();
     submenuItem.name = "Snake";
     submenuItem.type = functionCall;
-    submenuItem.fce = nullptr;
+    submenuItem.fce = snake_play;
     item.submenu->registerItem(submenuItem);
 
     // Register submenu

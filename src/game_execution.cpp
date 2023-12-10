@@ -11,6 +11,7 @@
 #include "Arkanoid.hpp"
 #include "gameAPI.h"
 #include "towers.hpp"
+#include "snake.hpp"
 
 //#include "Super-crate-buino.hpp"
 
@@ -54,6 +55,12 @@ static void _playGame(GameAPI& pGame)
             }
         }
     }
+}
+
+void snake_play()
+{
+    Snake snake;
+    _playGame(snake);
 }
 
 

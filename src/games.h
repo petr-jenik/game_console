@@ -22,3 +22,4 @@ void maze_play();
 void arkanoid_play();
 void super_crate_play();
 void towers_play();
+void snake_play();
