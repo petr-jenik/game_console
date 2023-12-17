@@ -5,3 +5,5 @@ __pycache__/
 *.o
 *.exe
 /REMOVE
+CMakeCache.txt
+CMakeFiles/
