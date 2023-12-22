@@ -29,7 +29,7 @@ private:
     int oponent_w = 2;
     int oponent_x = LCDWIDTH - oponent_w;
     int oponent_y = (LCDHEIGHT - oponent_h) / 2;
-    int oponent_vy = 2;
+    int oponent_vy = 1;
     //ball variables
     int ball_size = 6;
     int ball_x = LCDWIDTH - ball_size - oponent_w - 1;
@@ -137,19 +137,22 @@ public:
             player_score = 0;
             oponent_score = 0;
         }
+    
 
-        //move the oponent
-        if ((oponent_y + (oponent_h / 2)) < (ball_y + (ball_size / 2)))
-        { //if the ball is below the oponent
-            oponent_y = oponent_y + oponent_vy; //move down
-            oponent_y = min(LCDHEIGHT - oponent_h, oponent_y); //don't go out of the screen
-        }
-        else
+        if (1/*ball_vx > 0*/)
         {
-            oponent_y = oponent_y - oponent_vy; //move up
-            oponent_y = max(0, oponent_y); //don't go out of the screen
+            //move the oponent
+            if ((oponent_y + (oponent_h / 2)) < (ball_y + (ball_size / 2)))
+            { //if the ball is below the oponent
+                oponent_y = oponent_y + oponent_vy; //move down
+                oponent_y = min(LCDHEIGHT - oponent_h, oponent_y); //don't go out of the screen
+            }
+            else
+            {
+                oponent_y = oponent_y - oponent_vy; //move up
+                oponent_y = max(0, oponent_y); //don't go out of the screen
+            }
         }
-
         //draw the score
         //gb.display.fontSize = 2;
         //gb.display.cursorX = 15;
