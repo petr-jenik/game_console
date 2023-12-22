@@ -2,8 +2,8 @@ import pygame
 import copy
 import random
  
-RESOLUTION_X = 600
-RESOLUTION_Y = 300
+RESOLUTION_X = 840
+RESOLUTION_Y = 480
  
 
 class LcdScreen():
@@ -63,9 +63,12 @@ class LcdScreen():
                 # Rotate the display
                 self.pixels[self.LCD_WIDTH - x - 1][self.LCD_HEIGHT - y - 1] = value
  
-    def draw_rect(self, screen, x, y, color):
+    def draw_rect(self, screen, x, y, color, show_borders = True):
         #print(x * self.BLOCK_SIZE_X, y * self.BLOCK_SIZE_Y, self.BLOCK_SIZE_X, self.BLOCK_SIZE_Y)
-        rect = pygame.Rect(x * self.BLOCK_SIZE_X, y * self.BLOCK_SIZE_Y, self.BLOCK_SIZE_X - 1, self.BLOCK_SIZE_Y - 1)
+        if show_borders:
+            rect = pygame.Rect(x * self.BLOCK_SIZE_X, y * self.BLOCK_SIZE_Y, self.BLOCK_SIZE_X - 1, self.BLOCK_SIZE_Y - 1)
+        else:
+            rect = pygame.Rect(x * self.BLOCK_SIZE_X, y * self.BLOCK_SIZE_Y, self.BLOCK_SIZE_X, self.BLOCK_SIZE_Y)
         pygame.draw.rect(screen, color, rect)
  
     def draw(self, screen):
