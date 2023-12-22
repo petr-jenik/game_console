@@ -118,7 +118,7 @@ void screen_keyboard()
 
                     lineWidth += keyWidth;
 
-                    std::cout << keyWidth << ", " << keyHeight << std::endl;
+                    //std::cout << keyWidth << ", " << keyHeight << std::endl;
 
                     //int x = LCDWIDTH / 2 - lineWidth; //+ ((iCol - selectedCol) * (keyWidth + rectDist));
                     int x = LCDWIDTH / 2 + ((iCol - selectedCol) * (keyWidth + rectDist));
@@ -233,10 +233,10 @@ void screen_keyboard()
                 else
                 {
                     input_text += keyStr;
-                    std::cout << "key: " << keyStr << std::endl;
-                    std::cout << "selectedRow: " << selectedRow << std::endl;
-                    std::cout << "selectedCol: " << selectedCol << std::endl;
-                    std::cout << "Input text: " << input_text.c_str() << std::endl;
+                    //std::cout << "key: " << keyStr << std::endl;
+                    //std::cout << "selectedRow: " << selectedRow << std::endl;
+                    //std::cout << "selectedCol: " << selectedCol << std::endl;
+                    //std::cout << "Input text: " << input_text.c_str() << std::endl;
                 }
                 
             }
@@ -347,10 +347,10 @@ void screen_keyboard_good()
                 const char* key = &keyboard[selectedRow][selectedCol];
                 //input_text.concat(*key);
                 input_text += *key;
-                std::cout << "key: " << *key << std::endl;
-                std::cout << "selectedRow: " << selectedRow << std::endl;
-                std::cout << "selectedCol: " << selectedCol << std::endl;
-                std::cout << "Input text: " << input_text.c_str() << std::endl;
+                //std::cout << "key: " << *key << std::endl;
+                //std::cout << "selectedRow: " << selectedRow << std::endl;
+                //std::cout << "selectedCol: " << selectedCol << std::endl;
+                //std::cout << "Input text: " << input_text.c_str() << std::endl;
             }
         }
     }

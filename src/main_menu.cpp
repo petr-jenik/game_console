@@ -254,11 +254,12 @@ void menuSetup()
     item.submenu = new Menu;
 
     //MenuItem submenuItem;
+    /*
     submenuItem.name = "Keyboard test";
     submenuItem.type = functionCall;
     submenuItem.fce = showDemo;
     item.submenu->registerItem(submenuItem);
-
+    */
     submenuItem.clear();
     submenuItem.name = "Arkanoid";
     submenuItem.type = functionCall;
@@ -311,13 +312,13 @@ void menuSetup()
     //submenuItem.fce = marduino_play;
     item.submenu->registerItem(submenuItem);
 */
-
+/*
     submenuItem.clear();
     submenuItem.name = "Space Impact";
     submenuItem.type = functionCall;
     submenuItem.fce = nullptr;
     item.submenu->registerItem(submenuItem);
-
+*/
     submenuItem.clear();
     submenuItem.name = "Snake";
     submenuItem.type = functionCall;

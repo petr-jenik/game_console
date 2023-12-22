@@ -89,12 +89,16 @@ public:
         // 50 ms = 20 FPS
         // 67 ms = 15 FPS
 
-        unsigned long endTime = millis() + 67;
+
+        volatile unsigned long startTime = millis();
+
+        volatile unsigned long endTime = millis() + 67;
 
         //Serial.print("End time: ");
         //Serial.println(endTime); // prints time since program started
         //std::cout << "End time: " << endTime << std::endl;
-
+        
+        this->display.display();
 
         while(millis() < endTime)
         {
@@ -102,11 +106,18 @@ public:
             //Serial.println(millis()); // prints time since program started
 
             //std::cout << "Current time" << millis() << std::endl;
-            this->display.display();
+            #warning Following line might be actually needed on the real device
+            //this->display.display();
             
             // Why not?
-             delay(2);
+            delay(2);
         }
+
+        //delay(10);
+        unsigned long currentTime = millis();
+        unsigned long cycleLenMs = currentTime - startTime;
+
+        //std::cout << cycleLenMs  << std::endl;
 
         //this->display.clearDisplay();
 

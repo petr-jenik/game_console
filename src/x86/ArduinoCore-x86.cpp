@@ -85,7 +85,21 @@ using namespace std::chrono; // nanoseconds, system_clock, seconds
 
 void delay(unsigned long timeMs)
 {
-    sleep_for(milliseconds(timeMs));
+    volatile int32_t x = 1;
+    auto endTime = millis() + timeMs;
+    while(endTime > millis())
+    {
+        x++;
+        /*if (x % 500 == 0)
+        {
+            std::cout << "******************************" << std::endl;
+            std::cout << "Delay is running" << std::endl;
+            std::cout << "Current time: " << millis() << std::endl;
+            std::cout << "End time: " << endTime << std::endl;
+            std::cout << "X: " << x << std::endl;
+        }*/
+    }
+    //sleep_for(milliseconds(timeMs));
     //sleep_until(system_clock::now() + seconds(1));
 }
 
@@ -116,8 +130,8 @@ long random(long nMax)
 }
 long random(long nMin, long nMax)
 {
-    //return rand() % nMax
-    return 3;
+    return rand() % nMax;
+    //return 3;
 }
 
 void randomSeed(unsigned long)
