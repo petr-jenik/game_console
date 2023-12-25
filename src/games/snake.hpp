@@ -34,6 +34,10 @@ private:
         int32_t x;
         int32_t y;
         Direction eDirection;
+        bool bWasFood;
+        Position() {
+            this->bWasFood = false;
+        }
     } Position;
 
     // One row of a bitmap
@@ -51,9 +55,12 @@ private:
     enum ElementType
     {
         ElementType_Head = 0,
+        ElementType_HeadMouthOpen,
         ElementType_Body,
+        ElementType_BodyWithFood,
         ElementType_Tail,
         ElementType_Corner,
+        ElementType_CornerWithFood,
         ElementType_Food,
         ElementType_LAST = ElementType_Food,
         ElementType_COUNT
@@ -123,11 +130,23 @@ private:
                 {1,1,1,0},
                 {0,0,0,0}
             }},
+            {{   //Head - mouth open
+                {1,0,1,0},
+                {0,1,0,0},
+                {1,1,0,0},
+                {0,0,1,0}
+            }},
             {{   //Body
                 {0,0,0,0},
                 {1,1,0,1},
                 {1,0,1,1},
                 {0,0,0,0}
+            }},
+            {{   //Body with food
+                {0,1,1,0},
+                {1,1,0,1},
+                {1,0,1,1},
+                {0,1,1,0}
             }},
             {{   //Tail
                 {0,0,0,0},
@@ -137,6 +156,12 @@ private:
             }},
             {{   //Corner
                 {0,1,1,0},
+                {1,0,1,0},
+                {1,1,0,0},
+                {0,0,0,0}
+            }},
+            {{   //Corner with food
+                {1,1,1,0},
                 {1,0,1,0},
                 {1,1,0,0},
                 {0,0,0,0}
@@ -205,10 +230,23 @@ private:
         {
             bool bCornerDetected = false;
             auto bodyPart = this->queue[i];
-            ElementType elementType = ElementType_Body;
+            ElementType elementType = (bodyPart.bWasFood) ? ElementType_BodyWithFood : ElementType_Body;
 
             // Draw head
-            if (i == 0){ elementType = ElementType_Head;}
+            if (i == 0)
+            {
+                // This body part is the head of the snake
+                auto tmpHead = bodyPart;
+
+                // Check if the head will reach the food in next move. If yes, draw snake with open mouth.
+                predictNextStep(tmpHead, tmpHead.eDirection);
+                if ((tmpHead.x == this->mFood.x) && (tmpHead.y == this->mFood.y)) {
+                    elementType = ElementType_HeadMouthOpen;
+                }
+                else {
+                    elementType = ElementType_Head;
+                }
+            }
 
             if (currentDirection != bodyPart.eDirection)
             {
@@ -241,9 +279,11 @@ private:
                     nRotate = (nRotate + 1) % 4;
                 }
 
+                elementType = (bodyPart.bWasFood) ? ElementType_CornerWithFood : ElementType_Corner;
+
                 //std::cout << "directionDiff: " << directionDiff << std::endl;
                 //std::cout << "rotate N-times: " << nRotate << std::endl;
-                this->drawPart(gui, bodyPart.x, bodyPart.y, ElementType::ElementType_Corner, DirectionExtension_ManuallyRotate, nRotate);
+                this->drawPart(gui, bodyPart.x, bodyPart.y, elementType, DirectionExtension_ManuallyRotate, nRotate);
             }
 
             // Configure expected direction of following parts
@@ -293,9 +333,32 @@ private:
 
     }
 
+    void predictNextStep(Position & currentPosition, Direction direction)
+    {
+        if (direction == Direction::Direction_Up) {
+            currentPosition.y -= 1;
+        }
+        else if (direction == Direction::Direction_Down) {
+            currentPosition.y += 1;
+        }
+        else if (direction == Direction::Direction_Left) {
+            currentPosition.x -= 1;
+        }
+        else if (direction == Direction::Direction_Right) {
+            currentPosition.x += 1;
+        }
+        // Position wrap
+        currentPosition.x = (currentPosition.x + Snake::cGameAreaSizeX) % Snake::cGameAreaSizeX;
+        currentPosition.y = (currentPosition.y + Snake::cGameAreaSizeY) % Snake::cGameAreaSizeY;
+    }
+
     void move() {
         Position tmpHeadPosition = this->queue.front();
-        
+
+        // Find next position of the head
+        predictNextStep(tmpHeadPosition, this->mDirection);
+        tmpHeadPosition.eDirection = this->mDirection;
+/*
         if (this->mDirection == Direction::Direction_Up) {
             tmpHeadPosition.y -= 1;
         }
@@ -308,13 +371,10 @@ private:
         else if (this->mDirection == Direction::Direction_Right) {
             tmpHeadPosition.x += 1;
         }
-
         // Position wrap
         tmpHeadPosition.x = (tmpHeadPosition.x + Snake::cGameAreaSizeX) % Snake::cGameAreaSizeX;
         tmpHeadPosition.y = (tmpHeadPosition.y + Snake::cGameAreaSizeY) % Snake::cGameAreaSizeY;
-
-        tmpHeadPosition.eDirection = this->mDirection;
-
+*/
 
         // Collision detection
         if (isPointAlreadyUsed(tmpHeadPosition.x, tmpHeadPosition.y))
@@ -324,19 +384,22 @@ private:
             return;
         }
 
+        // Food collision detection
+        bool bFoodDetected = (tmpHeadPosition.x == this->mFood.x) && (tmpHeadPosition.y == this->mFood.y);
+        tmpHeadPosition.bWasFood = bFoodDetected;
+
         // Add new position to the queue
         this->queue.push_front(tmpHeadPosition);
 
-        // Add food detection
-        if((tmpHeadPosition.x == this->mFood.x) && (tmpHeadPosition.y == this->mFood.y))
-        {
-            // Generate new random position for food
-            this->placeNewFood();
-        }
-        else
+        if (bFoodDetected == false)
         {
             // Food not found, let's remove last element from the queue
             this->queue.pop_back();
+        }
+        else
+        {
+            // Generate new random position for food
+            this->placeNewFood();
         }
     }
 
