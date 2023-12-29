@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DST="../game_console_project_arduino/"
+DST="arduino_project/"
 
 find ./src/ -name *.ino -exec cp {} $DST/game_console_project_arduino.ino \;
 find ./src/ -name *.c -exec cp {}  $DST \;
