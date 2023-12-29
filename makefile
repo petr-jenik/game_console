@@ -416,6 +416,30 @@ src/game_execution.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\game_console.dir\build.make CMakeFiles/game_console.dir/src/game_execution.cpp.s
 .PHONY : src/game_execution.cpp.s
 
+src/games/space_game/space_game.obj: src/games/space_game/space_game.cpp.obj
+.PHONY : src/games/space_game/space_game.obj
+
+# target to build an object file
+src/games/space_game/space_game.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\game_console.dir\build.make CMakeFiles/game_console.dir/src/games/space_game/space_game.cpp.obj
+.PHONY : src/games/space_game/space_game.cpp.obj
+
+src/games/space_game/space_game.i: src/games/space_game/space_game.cpp.i
+.PHONY : src/games/space_game/space_game.i
+
+# target to preprocess a source file
+src/games/space_game/space_game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\game_console.dir\build.make CMakeFiles/game_console.dir/src/games/space_game/space_game.cpp.i
+.PHONY : src/games/space_game/space_game.cpp.i
+
+src/games/space_game/space_game.s: src/games/space_game/space_game.cpp.s
+.PHONY : src/games/space_game/space_game.s
+
+# target to generate assembly for a file
+src/games/space_game/space_game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\game_console.dir\build.make CMakeFiles/game_console.dir/src/games/space_game/space_game.cpp.s
+.PHONY : src/games/space_game/space_game.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -653,6 +677,9 @@ help:
 	@echo ... src/game_execution.obj
 	@echo ... src/game_execution.i
 	@echo ... src/game_execution.s
+	@echo ... src/games/space_game/space_game.obj
+	@echo ... src/games/space_game/space_game.i
+	@echo ... src/games/space_game/space_game.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

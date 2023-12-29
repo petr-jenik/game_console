@@ -21,6 +21,7 @@ include_directories("${LIB_DIR}/adafruit_driver")
 include_directories("${LIB_DIR}/adafruit_driver/Fonts")
 include_directories("${SRC_DIR}")
 include_directories("${SRC_DIR}/games")
+include_directories("${SRC_DIR}/games/space_game")
 include_directories("${SRC_DIR}/menu")
 include_directories("${SRC_DIR}/x86")
 include_directories("${SRC_DIR}/wifi")
@@ -38,6 +39,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DARDUINO=101 -D__cplusplus1 -DBUILD_
 
 
 set(CPP_SRCS
+    "${SRC_DIR}/games/space_game/space_game.cpp"
     "${SRC_DIR}/Buttons.cpp"
     "${SRC_DIR}/game_execution.cpp"
     "${SRC_DIR}/main.cpp"
