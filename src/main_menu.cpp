@@ -287,9 +287,9 @@ void menuSetup()
 /*
     //submenuItem.name = "2/6 Space Impact";
     submenuItem.clear();
-    submenuItem.name = "Space Impact";
+    submenuItem.name = "Space Game";
     submenuItem.type = functionCall;
-    submenuItem.fce = nullptr;
+    submenuItem.fce = spacegame_play;
     item.submenu->registerItem(submenuItem);
 
     submenuItem.clear();

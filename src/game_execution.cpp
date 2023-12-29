@@ -12,6 +12,7 @@
 #include "gameAPI.h"
 #include "towers.hpp"
 #include "snake.hpp"
+#include "space_game.hpp"
 
 //#include "Super-crate-buino.hpp"
 
@@ -93,6 +94,11 @@ void towers_play()
      _playGame(towers);
 }
 
+void spacegame_play()
+{
+    SpaceGame game;
+     _playGame(game);
+}
 
 /*
 void super_crate_play()

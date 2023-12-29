@@ -130,7 +130,8 @@ long random(long nMax)
 }
 long random(long nMin, long nMax)
 {
-    return rand() % nMax;
+    auto diff = nMax - nMin;
+    return nMin + (rand() % diff);
     //return 3;
 }
 
