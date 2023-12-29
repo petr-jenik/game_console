@@ -25,6 +25,9 @@ This projects reuses code from following projects:
 - Arduino Core
 - ESP32 core
 - gamebuino-maze
+- Adafruit_GFX
+- Adafruit_PCD8544
+- libzmq - ZeroMQ core engine in C++ (used for interprocess communication between compiled x86 binary and Python LCD simulation)
 
 Build process:
 ```bash
