@@ -7,3 +7,6 @@ __pycache__/
 /REMOVE
 CMakeCache.txt
 CMakeFiles/
+src/games/Space-Impact-II/
+cmake_install.cmake
+Makefile
