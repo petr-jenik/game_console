@@ -15,7 +15,9 @@ set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 
 # Include directories
 include_directories("${LIB_DIR}")
+include_directories("${LIB_DIR}/ArduinoCore-API/")
 include_directories("${LIB_DIR}/ArduinoCore-API/api")
+#include_directories("${LIB_DIR}/ArduinoCore-API/api/deprecated-avr-comp/avr")
 include_directories("${LIB_DIR}/ArduinoCore-API/test/include")
 include_directories("${LIB_DIR}/adafruit_driver")
 include_directories("${LIB_DIR}/adafruit_driver/Fonts")
