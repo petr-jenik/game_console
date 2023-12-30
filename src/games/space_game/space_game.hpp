@@ -1,10 +1,11 @@
 #pragma once
 
-//#include <queue> // std::queue
-//#include <deque> // std::deque
+#include <queue> // std::queue
+
 #include "gameAPI.h"
 #include "player.hpp"
-
+#include "enemy.hpp"
+#include "projectile.hpp"
 #include "stars.hpp"
 
 class SpaceGame : public GameAPI
@@ -12,9 +13,12 @@ class SpaceGame : public GameAPI
 private:
     Startfield mStarfield;
     Player mPlayer;
-    Deque<Enemy> mEnemies;
-    Deque<Projectile> mMyProjectiles;
-    Deque<Projectile> mEnemyProjectiles;
+
+
+    // Deque was used to be able to access individual elements by the corresponding index.
+    std::deque<Enemy> mEnemies;
+    std::deque<Projectile> mMyProjectiles;
+    std::deque<Projectile> mEnemyProjectiles;
     uint32_t mCycleCounter;
 public:
     SpaceGame();

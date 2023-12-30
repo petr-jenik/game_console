@@ -285,44 +285,35 @@ void menuSetup()
     item.submenu->registerItem(submenuItem);
 
 /*
-    //submenuItem.name = "2/6 Space Impact";
-    submenuItem.clear();
-    submenuItem.name = "Space Game";
-    submenuItem.type = functionCall;
-    submenuItem.fce = spacegame_play;
-    item.submenu->registerItem(submenuItem);
-
     submenuItem.clear();
     submenuItem.name = "Crates";
     submenuItem.type = functionCall;
     submenuItem.fce = nullptr;
     item.submenu->registerItem(submenuItem);
-    
+
     submenuItem.clear();
     submenuItem.type = functionCall;
     submenuItem.fce = nullptr;
     submenuItem.name = "Race cars";
     item.submenu->registerItem(submenuItem);
 
-
     submenuItem.clear();
     submenuItem.type = functionCall;
-    submenuItem.fce = nullptr;
     submenuItem.name = "Mario";
-    //submenuItem.fce = marduino_play;
+    submenuItem.fce = marduino_play;
     item.submenu->registerItem(submenuItem);
 */
-/*
-    submenuItem.clear();
-    submenuItem.name = "Space Impact";
-    submenuItem.type = functionCall;
-    submenuItem.fce = nullptr;
-    item.submenu->registerItem(submenuItem);
-*/
+
     submenuItem.clear();
     submenuItem.name = "Snake";
     submenuItem.type = functionCall;
     submenuItem.fce = snake_play;
+    item.submenu->registerItem(submenuItem);
+
+    submenuItem.clear();
+    submenuItem.name = "Space Game";
+    submenuItem.type = functionCall;
+    submenuItem.fce = spacegame_play;
     item.submenu->registerItem(submenuItem);
 
     // Register submenu

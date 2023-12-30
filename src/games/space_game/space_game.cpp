@@ -15,8 +15,6 @@ void SpaceGame::setup()
     gui.welcomeScreen("Space game - setup");
 }
 
-
-
 void SpaceGame::loop()
 {
     // Show welcome screen
@@ -24,14 +22,14 @@ void SpaceGame::loop()
     gui.display.clearDisplay();
     //gui.welcomeScreen("Space game - loop");
 
-    if ((mCycleCounter / 15) % 2 == 0)
+    /*if ((mCycleCounter / 15) % 2 == 0)
     {
         this->mStarfield.move(true);
     }
     else
     {
         this->mStarfield.move(false);
-    }
+    }*/
 
     mStarfield.update();
     mStarfield.draw(gui);
